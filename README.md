@@ -1,2 +1,0 @@
-# ReactCrudSimpleWithRoutes
-Created with CodeSandbox
