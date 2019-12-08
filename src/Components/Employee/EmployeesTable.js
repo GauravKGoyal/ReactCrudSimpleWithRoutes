@@ -8,7 +8,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import AddIcon from "@material-ui/icons/Add";
 import Button from "@material-ui/core/Button";
 import { employees as rows } from "../../store";
-import { Paper } from "@material-ui/core";
+
 
 class EmployeesTable extends Component {
   constructor(props) {
