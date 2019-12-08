@@ -1,5 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
+import {employees} from "../../store";
+import EmployeesTable from "./EmployeesTable";
 
-export default function AllEmployee() {
-  return <div>all employees</div>;
+class AllEmployees extends Component {
+  render() {
+    return <EmployeesTable rows={employees} totalRowsCount={100} history={this.props.history}/>;
+  }
 }
+
+export default AllEmployees;

@@ -1,12 +1,8 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Route, NavLink, HashRouter } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import RouterButton from "./RouterButton";
 
 const useStyles = makeStyles(theme => ({
@@ -31,8 +27,8 @@ export default function ButtonAppBar() {
           <Typography variant="h6" className={classes.title}>
             Employees
           </Typography>
-          <RouterButton color="inherit" to="/Employees" text="Employees"></RouterButton>
-          <RouterButton color="inherit" to="/Login" text="Login"></RouterButton>
+          <RouterButton color="inherit" to="/" text="Employees" />
+          <RouterButton color="inherit" to="/Login/" text="Login" />
           {/* <Button color="inherit">Login</Button> */}
         </Toolbar>
       </AppBar>
