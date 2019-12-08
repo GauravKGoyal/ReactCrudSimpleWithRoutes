@@ -7,6 +7,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Link } from "react-router-dom";
+import AddIcon from "@material-ui/icons/Add";
+import Button from "@material-ui/core/Button";
 
 class EmployeesTable extends Component {
   constructor(props) {
@@ -32,12 +34,22 @@ class EmployeesTable extends Component {
     console.log(row.id);
     this.setState({ selectedRowId: row.id });
     console.log(this.props.location);
-    this.props.history.push("/employee/edit/" + row.id);
+    this.props.history.push("/employees/edit/" + row.id);
+  };
+  handleClickAdd = event => {
+    this.props.history.push("/employees/add");
   };
 
   render() {
     return (
       <div style={{ width: "100%", overflowX: "auto" }}>
+        <Button
+          startIcon={<AddIcon />}
+          color="primary"
+          onClick={this.handleClickAdd}
+        >
+          Add
+        </Button>
         <div style={{ overflowX: "auto" }}>
           <Table aria-label="simple table">
             <TableHead>

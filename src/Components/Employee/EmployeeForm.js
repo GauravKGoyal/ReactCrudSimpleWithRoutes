@@ -6,6 +6,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { Typography } from "@material-ui/core";
+import { employees } from "../../store";
 
 class EmployeeForm extends Component {
   constructor(props) {
@@ -14,17 +15,28 @@ class EmployeeForm extends Component {
       id: 0,
       firstName: "",
       lastName: "",
+      action: "Add",
       changed: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   handleInputChange(event) {
     const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
+    
+    let value = target.value;
+    if (target.type === "checkbox")
+    {
+      value = target.checked;
+    }
+    else if (target.type ==="number")
+    {
+      value = parseInt(target.value, 0);
+    }
 
+    const name = target.name;
     this.setState({ changed: true });
     this.setState({
       [name]: value
@@ -40,33 +52,48 @@ class EmployeeForm extends Component {
         return;
       }
     }
-    this.clearInputStates();
+ //   this.clearInputStates();
+    this.props.history.push("/");
   }
 
   handleSubmit() {
     if (this.state.changed === true) {
-      var contents = JSON.stringify({
-        id: this.state.id,
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        changed: this.state.changed
-      });
-      alert(contents);
-      this.props.saveData(contents);
+      // save to database
+      if (this.state.action === "Edit") {
+        let emp = employees.find(e => e.id === this.state.id);
+        emp.firstName = this.state.firstName;
+        emp.lastName = this.state.lastName;
+      } else {
+        var formEmployee = {
+          id: this.state.id,
+          firstName: this.state.firstName,
+          lastName: this.state.lastName
+        };
+        employees.push(formEmployee);
+      }
+
+      this.props.history.push("/");
+      this.setState({ changed: false });
+      
     }
-    // save to database
 
     // show toast for success or failure
   }
 
   componentDidMount() {
-    console.log("sdf", this.props);
-    this.setState({
-      id: this.props.data.id,
-      firstName: this.props.data.firstName,
-      lastName: this.props.data.lastName,
-      changed: false
-    });
+    let employeeId = parseInt(this.props.match.params.id, 0);
+    let emp = employees.find(e => e.id === employeeId);
+//alert(JSON.stringify(employees), JSON.stringify(emp));
+    // if employee exit the edit it otherwise add it
+    if (emp) {
+      this.setState({
+        id: emp.id,
+        firstName: emp.firstName,
+        lastName: emp.lastName,
+        action: "Edit",
+        changed: false
+      });
+    }
   }
 
   render() {
@@ -81,7 +108,7 @@ class EmployeeForm extends Component {
               paddingRight: 24
             }}
           >
-            <Typography variant="h6">{this.props.action} Employee</Typography>
+            <Typography variant="h6">{this.state.action} Employee</Typography>
           </div>
           <div
             style={{
@@ -135,7 +162,7 @@ class EmployeeForm extends Component {
               paddingRight: 16
             }}
           >
-            <Button onClick={this.handleClose}>Cancel</Button>
+            <Button onClick={this.handleClose}>Close</Button>
             <Button type="submit" color="primary">
               Save
             </Button>
