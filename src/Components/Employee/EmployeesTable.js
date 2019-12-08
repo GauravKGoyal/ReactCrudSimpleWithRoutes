@@ -7,13 +7,15 @@ import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 import AddIcon from "@material-ui/icons/Add";
 import Button from "@material-ui/core/Button";
+import { employees as rows } from "../../store";
+import { Paper } from "@material-ui/core";
 
 class EmployeesTable extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      page: 1,
+      page: 0,
       rowsPerPage: 5
     };
     this.handleChangePage = this.handleChangePage.bind(this);
@@ -25,13 +27,11 @@ class EmployeesTable extends Component {
     this.setState({ page: newPage });
   };
   handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: parseInt(event.target.value, 5) });
-    this.setState({ page: 1 });
+    this.setState({ rowsPerPage: parseInt(event.target.value, 10) });
+    this.setState({ page: 0 });
   };
   handleClickRow = (event, row) => {
-    console.log(row.id);
     this.setState({ selectedRowId: row.id });
-    console.log(this.props.location);
     this.props.history.push("/employees/edit/" + row.id);
   };
   handleClickAdd = event => {
@@ -40,50 +40,57 @@ class EmployeesTable extends Component {
 
   render() {
     return (
-      <div style={{ width: "100%", overflowX: "auto" }}>
-        <Button
-          startIcon={<AddIcon />}
-          color="primary"
-          onClick={this.handleClickAdd}
-        >
-          Add
-        </Button>
-        <div style={{ overflowX: "auto" }}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Id</TableCell>
-                <TableCell align="right">Fistname</TableCell>
-                <TableCell align="right">Lastname</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.props.rows.map(row => (
-                <TableRow
-                  hover
-                  key={row.id}
-                  onClick={event => this.handleClickRow(event, row)}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.id}
-                  </TableCell>
-                  <TableCell align="right">{row.firstName}</TableCell>
-                  <TableCell align="right">{row.lastName}</TableCell>
+    
+        <div>
+          <Button
+            startIcon={<AddIcon />}
+            color="primary"
+            onClick={this.handleClickAdd}
+          >
+            Add
+          </Button>
+          <div style={{ overflowX: "auto" }}>
+            <Table aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Id</TableCell>
+                  <TableCell align="right">Fistname</TableCell>
+                  <TableCell align="right">Lastname</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {rows
+                  .slice(
+                    this.state.page * this.state.rowsPerPage,
+                    this.state.page * this.state.rowsPerPage +
+                      this.state.rowsPerPage
+                  )
+                  .map(row => (
+                    <TableRow
+                      hover
+                      key={row.id}
+                      onClick={event => this.handleClickRow(event, row)}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.id}
+                      </TableCell>
+                      <TableCell align="right">{row.firstName}</TableCell>
+                      <TableCell align="right">{row.lastName}</TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </div>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={this.state.rowsPerPage}
+            page={this.state.page}
+            onChangePage={this.handleChangePage}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          />
         </div>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={this.props.totalRowsCount}
-          rowsPerPage={this.state.rowsPerPage}
-          page={this.state.page}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
-        />
-      </div>
     );
   }
 }

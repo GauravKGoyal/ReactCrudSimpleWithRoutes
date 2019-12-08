@@ -21,14 +21,11 @@ class EmployeeForm extends Component {
 
   handleInputChange(event) {
     const target = event.target;
-    
+
     let value = target.value;
-    if (target.type === "checkbox")
-    {
+    if (target.type === "checkbox") {
       value = target.checked;
-    }
-    else if (target.type ==="number")
-    {
+    } else if (target.type === "number") {
       value = parseInt(target.value, 0);
     }
 
@@ -42,13 +39,13 @@ class EmployeeForm extends Component {
   handleClose() {
     if (this.state.changed === true) {
       const isConfirmed = window.confirm(
-        "Are you sure you want to exit without saving?"
+        "Are you sure you want to close without saving?"
       );
       if (isConfirmed === false) {
         return;
       }
     }
- //   this.clearInputStates();
+    //   this.clearInputStates();
     this.props.history.push("/");
   }
 
@@ -67,11 +64,9 @@ class EmployeeForm extends Component {
         };
         employees.push(formEmployee);
       }
-
-      this.props.history.push("/");
       this.setState({ changed: false });
-      
     }
+    this.props.history.push("/");
 
     // show toast for success or failure
   }
@@ -79,7 +74,7 @@ class EmployeeForm extends Component {
   componentDidMount() {
     let employeeId = parseInt(this.props.match.params.id, 0);
     let emp = employees.find(e => e.id === employeeId);
-//alert(JSON.stringify(employees), JSON.stringify(emp));
+    //alert(JSON.stringify(employees), JSON.stringify(emp));
     // if employee exit the edit it otherwise add it
     if (emp) {
       this.setState({
@@ -98,20 +93,14 @@ class EmployeeForm extends Component {
         <form key={this.id} onSubmit={this.handleSubmit}>
           <div
             style={{
-              paddingTop: 8,
-              paddingBottom: 8,
-              paddingLeft: 24,
-              paddingRight: 24
+              marginBottom: 8
             }}
           >
             <Typography variant="h6">{this.state.action} Employee</Typography>
           </div>
           <div
             style={{
-              paddingTop: 8,
-              paddingBottom: 8,
-              paddingLeft: 24,
-              paddingRight: 24
+              marginBottom: 8
             }}
           >
             <TextField
@@ -150,18 +139,13 @@ class EmployeeForm extends Component {
               fullWidth
             />
           </div>
-          <div
-            style={{
-              paddingTop: 8,
-              paddingBottom: 8,
-              paddingLeft: 16,
-              paddingRight: 16
-            }}
-          >
-            <Button onClick={this.handleClose}>Close</Button>
+          <div  style={{
+              marginLeft: -16
+            }}>
             <Button type="submit" color="primary">
               Save
             </Button>
+            <Button onClick={this.handleClose}>Close</Button>
           </div>
         </form>
       </div>
